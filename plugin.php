@@ -157,6 +157,12 @@ class AccordionTables {
 			[ 'jquery-ui-accordion', 'jquery' ],
 			$this->version
 		);
+		wp_register_style(
+			'accordion_tables',
+			plugins_url('/accordion-tables/css/style.css'),
+			[],
+			$this->version
+		);
 	}
 
 	public function register_post_type() {
@@ -201,6 +207,7 @@ class AccordionTables {
 
 	public function accordion_tables_shortcode() {
 		wp_enqueue_script('accordion_tables');
+		wp_enqueue_style('accordion_tables');
 		$accordion_items = new WP_Query([
 			'post_type' => 'accordion_tables'
 		]);
@@ -208,12 +215,85 @@ class AccordionTables {
 		ob_start();
 ?>
 <div id="accordion_tables">
-<?php while( $accordion_items->have_posts() ): $accordion_items->the_post(); ?>
-	<h3><?php the_title(); ?></h3>
-	<div>
-		<?php the_content(); ?>
+	<div class="header">
+		<div class="one-fifth">
+			<p>&nbsp;</p>
+		</div>
+		<div class="one-fifth">
+			<h4>Dynamics 365 Business Central Essen al Basic</h4>
+		</div>
+		<div class="one-fifth">
+			<h4>Dynamics 365 Business Central Essen al</h4>
+		</div>
+		<div class="one-fifth">
+			<h4>Dynamics 365 Byg & Anlæg</h4>
+			<small>Op  l 10 administra ve brugere</small>
+		</div>
+		<div class="one-fifth">
+			<h4>Dynamics 365 Byg & Anlæg</h4>
+			<small>+ 10 administra ve brugere</small>
+		</div>
 	</div>
+	<div class="accordion_container">
+<?php while( $accordion_items->have_posts() ): $accordion_items->the_post(); ?>
+<?php $property = get_post_meta( get_the_ID(), '_accordion_labels', true ); ?>
+		<h3>
+			<div>
+				<div class="one-fifth"><?php the_title(); ?></div>
+				<div class="one-fifth">
+					<?php if( empty( $property[0] ) ) : ?>
+						<p>&nbsp;</p>
+					<?php elseif( $property[0] == 'check' ) : ?>
+						<img class="accordion-icon" src="<?php echo plugins_url('/accordion-tables/images/check-green.svg'); ?>"/>
+					<?php elseif( $property[0] == 'phone' ) : ?>
+						<img class="accordion-icon" src="<?php echo plugins_url('/accordion-tables/images/phone-green.svg'); ?>"/>
+					<?php else: ?>
+						<p><?php echo $property[0]; ?></p>
+					<?php endif; ?>
+				</div>
+				<div class="one-fifth">
+					<?php if( empty( $property[1] ) ) : ?>
+						<p>&nbsp;</p>
+					<?php elseif( $property[1] == 'check' ) : ?>
+						<img class="accordion-icon" src="<?php echo plugins_url('/accordion-tables/images/check-green.svg'); ?>"/>
+					<?php elseif( $property[1] == 'phone' ) : ?>
+						<img class="accordion-icon" src="<?php echo plugins_url('/accordion-tables/images/phone-green.svg'); ?>"/>
+					<?php else: ?>
+						<p><?php echo $property[1]; ?></p>
+					<?php endif; ?>
+				</div>
+				<div class="one-fifth">
+					<?php if( empty( $property[2] ) ) : ?>
+						<p>&nbsp;</p>
+					<?php elseif( $property[2] == 'check' ) : ?>
+						<img class="accordion-icon" src="<?php echo plugins_url('/accordion-tables/images/check-green.svg'); ?>"/>
+					<?php elseif( $property[2] == 'phone' ) : ?>
+						<img class="accordion-icon" src="<?php echo plugins_url('/accordion-tables/images/phone-green.svg'); ?>"/>
+					<?php else: ?>
+						<p><?php echo $property[2]; ?></p>
+					<?php endif; ?>
+				</div>
+				<div class="one-fifth">
+					<?php if( empty( $property[3] ) ) : ?>
+						<p>&nbsp;</p>
+					<?php elseif( $property[3] == 'check' ) : ?>
+						<img class="accordion-icon" src="<?php echo plugins_url('/accordion-tables/images/check-green.svg'); ?>"/>
+					<?php elseif( $property[3] == 'phone' ) : ?>
+						<img class="accordion-icon" src="<?php echo plugins_url('/accordion-tables/images/phone-green.svg'); ?>"/>
+					<?php else: ?>
+						<p><?php echo $property[3]; ?></p>
+					<?php endif; ?>
+				</div>
+			</div>
+		</h3>
+		<div>
+			<div class="one-fifth"><p>&nbsp;</p></div>
+			<div class="four-fifth">
+				<?php the_content(); ?>
+			</div>
+		</div>
 <?php endwhile; ?>
+	</div>
 </div>
 <?php
 		wp_reset_postdata();
