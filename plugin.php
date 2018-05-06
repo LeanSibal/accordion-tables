@@ -79,7 +79,7 @@ class AccordionTables {
 	</label>
 	<br/>
 	<label>
-		<input type="radio" name="properties[0]" value="custom_value" <?php echo ( !empty( $properties[0] ) && $properties[0] !== 'phone' && $properties[0] !== 'check' ) ? 'checked' : ''; ?>/>
+		<input type="radio" name="properties[0][type]" value="custom_value" <?php echo ( !empty( $properties[0] ) && $properties[0] !== 'phone' && $properties[0] !== 'check' ) ? 'checked' : ''; ?>/>
 		<input class="custom_value" type="text" name="properties[0][text]" placeholder="Custom Value" value="<?php echo ( !empty( $properties[0] ) && $properties[0] !== 'phone' && $properties[0] !== 'check' ) ? $properties[0] : ''; ?>"/>
 	</label>
 
