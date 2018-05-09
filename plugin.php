@@ -216,30 +216,37 @@ class AccordionTables {
 ?>
 <div id="accordion_tables">
 	<div class="header">
-		<div class="one-fifth">
+		<div class="one-fifth nostyle">
 			<p>&nbsp;</p>
 		</div>
 		<div class="one-fifth">
-			<h4>Dynamics 365 Business Central Essen al Basic</h4>
+			<div class="spacer">
+				<h4>Dynamics 365 Business Central Essential Basic</h4>
+			</div>
 		</div>
 		<div class="one-fifth">
-			<h4>Dynamics 365 Business Central Essen al</h4>
+			<div class="spacer">
+				<h4>Dynamics 365 Business Central Essential</h4>
+			</div>
 		</div>
 		<div class="one-fifth">
-			<h4>Dynamics 365 Byg & Anlæg</h4>
-			<small>Op  l 10 administra ve brugere</small>
+			<div class="spacer">
+				<h4>Dynamics 365 Byg & Anlæg</h4>
+				<small>Op  l 10 administra ve brugere</small>
+			</div>
 		</div>
 		<div class="one-fifth">
-			<h4>Dynamics 365 Byg & Anlæg</h4>
-			<small>+ 10 administra ve brugere</small>
+			<div class="spacer">
+				<h4>Dynamics 365 Byg & Anlæg</h4>
+				<small>+ 10 administra ve brugere</small>
+			</div>
 		</div>
 	</div>
 	<div class="accordion_container">
 <?php while( $accordion_items->have_posts() ): $accordion_items->the_post(); ?>
 <?php $property = get_post_meta( get_the_ID(), '_accordion_labels', true ); ?>
 		<h3>
-			<div>
-				<div class="one-fifth"><?php the_title(); ?></div>
+				<div class="one-fifth align-right"><?php the_title(); ?></div>
 				<div class="one-fifth">
 					<?php if( empty( $property[0] ) ) : ?>
 						<p>&nbsp;</p>
@@ -284,9 +291,8 @@ class AccordionTables {
 						<p><?php echo $property[3]; ?></p>
 					<?php endif; ?>
 				</div>
-			</div>
 		</h3>
-		<div>
+		<div class="content-container">
 			<div class="one-fifth"><p>&nbsp;</p></div>
 			<div class="four-fifth">
 				<?php the_content(); ?>
