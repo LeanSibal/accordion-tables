@@ -209,7 +209,11 @@ class AccordionTables {
 		wp_enqueue_script('accordion_tables');
 		wp_enqueue_style('accordion_tables');
 		$accordion_items = new WP_Query([
-			'post_type' => 'accordion_tables'
+			'post_type' => 'accordion_tables',
+			'order' => 'ASC',
+			'orderby' => 'meta_value_num',
+			'posts_per_page' => -1,
+			'meta_key' => '_list_order'
 		]);
 		if( !$accordion_items->have_posts() ) return;
 		ob_start();
@@ -294,7 +298,7 @@ class AccordionTables {
 		</h3>
 		<div class="content-container">
 			<div class="one-fifth"><p>&nbsp;</p></div>
-			<div class="four-fifth">
+			<div class="four-fifth accordion-content">
 				<?php the_content(); ?>
 			</div>
 		</div>

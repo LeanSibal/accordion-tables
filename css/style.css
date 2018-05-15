@@ -58,3 +58,6 @@
 #accordion_tables .header small {
 	font-size:10px;
 }
+#accordion_tables .accordion-content {
+	padding:15px;
+}
