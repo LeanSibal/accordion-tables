@@ -4,7 +4,7 @@ Plugin Name: Accordion Tables
 PluginURI: http://www.renesejling.dk
 Description: Display tables as Accordions using shortcode [accordion_tables]
 Author: René Sejling
-Version: 1.0
+Version: 1.0.1
 */
 
 class AccordionTables {
