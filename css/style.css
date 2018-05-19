@@ -18,6 +18,17 @@
 	width:80%;
 	float:left;
 }
+#accordion_tables .flex {
+	display:flex;
+	flex-wrap:nowrap;
+	align-items: stretch;
+	justify-content: space-between;
+}
+#accordion_tables .flex-grow {
+	flex-grow:1;
+	text-align:center;
+}
+
 
 #accordion_tables h3 {
 	display:block;
@@ -37,11 +48,12 @@
 	width:100%;
 	float:left;
 }
-#accordion_tables .header .one-fifth {
+#accordion_tables .header .flex-grow {
 	padding:5px;
 }
-#accordion_tables .header .one-fifth .spacer {
-	padding-top:15px;
+#accordion_tables .header .flex-grow .spacer {
+	text-align:center;
+	padding:15px;
 	height:110px;
 	background-color:#008709;
 	color:#fff;
@@ -54,9 +66,14 @@
 	font-size:16px;
 	font-weight:bold;
 	padding-bottom:0px;
+	margin-bottom:5px;
 }
-#accordion_tables .header small {
+#accordion_tables .header span {
 	font-size:10px;
+	word-break:break-all;
+}
+#accordion_tables .accordion_title {
+	margin-right:5px;
 }
 #accordion_tables .accordion-content {
 	padding:15px;
