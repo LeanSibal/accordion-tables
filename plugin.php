@@ -40,7 +40,8 @@ class AccordionTables {
 		if( ! wp_verify_nonce( $_POST['accordion_tables_nonce'], 'accordion_tables_nonce' ) ) return $post_id;
 		if( empty( $_POST['post_type'] ) || $_POST['post_type'] !== 'accordion_tables' ) return $post_id;
 		if( defined( 'DOING_AUTOSAVE') && DOING_AUTOSAVE ) return $post_id;
-		$row_headers = get_terms( 'row_headers', [
+		$row_headers = get_terms([
+			'taxonomy' => 'row_headers',
 			'hide_empty' => false,
 			'orderby' => 'meta_value_num',
 			'order' => 'ASC',
@@ -66,7 +67,8 @@ class AccordionTables {
 		wp_nonce_field( 'accordion_tables_nonce', 'accordion_tables_nonce' );
 		$properties = get_post_meta( $post->ID, '_accordion_labels', true );
 		$order = get_post_meta( $post->ID, '_list_order', true );
-		$row_headers = get_terms( 'row_headers', [
+		$row_headers = get_terms([
+			'taxonomy' => 'row_headers',
 			'hide_empty' => false,
 			'orderby' => 'meta_value_num',
 			'order' => 'ASC',
@@ -240,7 +242,8 @@ class AccordionTables {
 			'posts_per_page' => -1,
 			'meta_key' => '_list_order'
 		]);
-		$row_headers = get_terms( 'row_headers', [
+		$row_headers = get_terms([
+			'taxonomy' => 'row_headers',
 			'hide_empty' => false,
 			'orderby' => 'meta_value_num',
 			'order' => 'ASC',
