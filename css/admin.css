@@ -15,3 +15,14 @@
 #accordion_tables_meta_box input[type="number"] {
 	width:40px;
 }
+
+.center-align-table,
+.center-align-table th {
+	text-align:center;
+}
+.ms-container  {
+	margin:auto;
+}
+.ms-container .ms-list {
+	height:400px !important;
+}

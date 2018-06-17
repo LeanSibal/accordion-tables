@@ -223,7 +223,89 @@ class AccordionTables {
 		);
 
 		register_post_type( 'accordion_tables', $args );
+		add_submenu_page(
+			'edit.php?post_type=accordion_tables',
+			__('Table Shortcodes','accordion_tables'),
+			__('Table Shortcodes','accordion_tables'),
+			'manage_options',
+			'table_shortcodes_page',
+			[ $this, 'table_shortcodes_page' ]
+		);
+	}
 
+	public function table_shortcodes_page(){
+		wp_enqueue_style('admin_accordion_tables');
+		wp_enqueue_script( 'admin_accordion_tables' );
+		wp_enqueue_style( 'lou_multi_select' );
+		$accordion_items = new WP_Query([
+			'post_type' => 'accordion_tables',
+			'order' => 'ASC',
+			'orderby' => 'meta_value_num',
+			'posts_per_page' => -1,
+			'meta_key' => '_list_order'
+		]);
+		$row_headers = get_terms([
+			'taxonomy' => 'row_headers',
+			'hide_empty' => false,
+			'orderby' => 'meta_value_num',
+			'order' => 'ASC',
+			'meta_key' => 'tax-order'
+		]);
+		ob_start();
+?>
+<div class="wrap">
+	<h1>Table Shortcodes Generator</h1>
+	<hr class="wp-header-end">
+	<h2>Create New Shortcode</h2>
+	<table class="form-table center-align-table">
+		<thead>
+			<tr>
+				<th colspan="2">
+					<p>[accordion_tables test]</p>
+				</th>
+			</tr>
+			<tr>
+				<th>
+					<label for="shortcode_name">
+						Shortcode Name
+						<input name="shortcode_name" type="text" class="regular-text ltr">
+					</label>
+				</th>
+				<th>
+					<a href="http://localhost/iteffect/wp-admin/post-new.php?post_type=accordion_tables" class="page-title-action">Save</a>
+				</th>
+			</tr>
+			<tr>
+				<th>
+					Accordion Items
+				</th>
+				<th>
+					Headers
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					<select name="post_ids[]" class="searchable" multiple="multiple">
+						<?php while( $accordion_items->have_posts() ): $accordion_items->the_post(); ?>
+							<option value="<?php echo get_the_ID(); ?>"><?php echo get_the_title(); ?></option>
+						<?php endwhile; ?>
+					</select>
+				</td>
+				<td>
+					<select name="category_ids[]" class="searchable" multiple="multiple">
+						<?php foreach( $row_headers as $row_header ): ?>
+							<option value="<?php echo $row_header->slug; ?>"><?php echo $row_header->name; ?></option>
+						<?php endforeach; ?>
+					</select>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<?php
+		echo ob_get_clean();
 	}
 
 	private function floorp($val, $precision) {
@@ -312,6 +394,30 @@ class AccordionTables {
 			plugins_url( '/accordion-tables/css/admin.css' ),
 			false,
 			$this->version
+		);
+		wp_register_script(
+			'admin_accordion_tables',
+			plugins_url( '/accordion-tables/js/admin.js' ),
+			[ 'jquery', 'lou_multi_select' ],
+			$this->version
+		);
+		wp_register_style(
+			'lou_multi_select',
+			plugins_url( '/accordion-tables/css/multi-select.css' ),
+			false,
+			'0.9.12'
+		);
+		wp_register_script(
+			'lou_multi_select',
+			plugins_url( '/accordion-tables/js/jquery.multi-select.js' ),
+			[ 'jquery', 'jquery.quicksearch' ],
+			'0.9.12'
+		);
+		wp_register_script(
+			'jquery.quicksearch',
+			plugins_url( '/accordion-tables/js/jquery.quicksearch.js' ),
+			[ 'jquery' ],
+			'0.9.12'
 		);
 
 	}
