@@ -20,8 +20,12 @@
 .center-align-table th {
 	text-align:center;
 }
-.ms-container  {
+.form-table .ms-container  {
+	width:450px !important;
 	margin:auto;
+}
+.form-table .ms-container .search-input {
+	width:100%;
 }
 .ms-container .ms-list {
 	height:400px !important;

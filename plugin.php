@@ -251,56 +251,118 @@ class AccordionTables {
 			'order' => 'ASC',
 			'meta_key' => 'tax-order'
 		]);
+		$accordion_tables = get_option( 'accordion_tables' );
+		$current = [
+			'shortcode_name' => '',
+			'post_ids' => [],
+			'category_ids' => []
+		];
 		ob_start();
+		if( !empty( $_POST ) && !empty( $_POST['admin_accordion_tables_save'] ) && wp_verify_nonce( $_POST['admin_accordion_tables_save'], 'admin_accordion_tables_save' ) ) {
+			// save function
+			$post_ids = ( !empty( $_POST['post_ids'] ) ? $_POST['post_ids'] : [] );
+			$category_ids = ( !empty( $_POST['category_ids'] ) ? $_POST['category_ids'] : [] );
+			$current = [
+				'post_ids' => ( !empty( $_POST['post_ids'] ) ? $_POST['post_ids'] : [] ),
+				'category_ids' => ( !empty( $_POST['category_ids'] ) ? $_POST['category_ids'] : [] )
+			];
+			if( !empty( $_POST['shortcode_name'] ) ) {
+				$accordion_tables[ $_POST['shortcode_name'] ] = $current;
+				update_option('accordion_tables', $accordion_tables );
+				$current['shortcode_name'] = $_POST['shortcode_name'];
+			} else {
+				$current['shortcode_name'] = '';
+			}
+		} else if ( !empty( $_POST ) && !empty( $_POST['admin_accordion_tables_edit'] ) && wp_verify_nonce( $_POST['admin_accordion_tables_edit'], 'admin_accordion_tables_edit' ) && !empty( $accordion_tables[ $_POST['shortcode_name'] ] ) ) {
+			$current = $accordion_tables[ $_POST['shortcode_name'] ];
+			$current['shortcode_name'] = $_POST['shortcode_name'];
+		} else if ( !empty( $_POST ) && !empty( $_POST['admin_accordion_tables_delete'] ) && wp_verify_nonce( $_POST['admin_accordion_tables_delete'], 'admin_accordion_tables_delete' ) && !empty( $accordion_tables[ $_POST['shortcode_name'] ] ) ) {
+			unset( $accordion_tables[ $_POST['shortcode_name'] ] );
+			update_option( 'accordion_tables', $accordion_tables );
+		}
 ?>
 <div class="wrap">
-	<h1>Table Shortcodes Generator</h1>
-	<hr class="wp-header-end">
-	<h2>Create New Shortcode</h2>
-	<table class="form-table center-align-table">
-		<thead>
-			<tr>
-				<th colspan="2">
-					<p>[accordion_tables test]</p>
-				</th>
-			</tr>
-			<tr>
-				<th>
-					<label for="shortcode_name">
-						Shortcode Name
-						<input name="shortcode_name" type="text" class="regular-text ltr">
-					</label>
-				</th>
-				<th>
-					<a href="http://localhost/iteffect/wp-admin/post-new.php?post_type=accordion_tables" class="page-title-action">Save</a>
-				</th>
-			</tr>
-			<tr>
-				<th>
-					Accordion Items
-				</th>
-				<th>
-					Headers
-				</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>
-					<select name="post_ids[]" class="searchable" multiple="multiple">
-						<?php while( $accordion_items->have_posts() ): $accordion_items->the_post(); ?>
-							<option value="<?php echo get_the_ID(); ?>"><?php echo get_the_title(); ?></option>
-						<?php endwhile; ?>
-					</select>
-				</td>
-				<td>
-					<select name="category_ids[]" class="searchable" multiple="multiple">
-						<?php foreach( $row_headers as $row_header ): ?>
-							<option value="<?php echo $row_header->slug; ?>"><?php echo $row_header->name; ?></option>
-						<?php endforeach; ?>
-					</select>
-				</td>
-			</tr>
+	<form method="post">
+		<?php wp_nonce_field( 'admin_accordion_tables_save', 'admin_accordion_tables_save' ); ?>
+		<h1>Table Shortcodes Generator</h1>
+		<hr class="wp-header-end">
+		<h2>Create New Shortcode</h2>
+		<table class="form-table center-align-table">
+			<thead>
+				<tr>
+					<th colspan="2">
+					<p>[accordion_tables id="<?php echo $current['shortcode_name']; ?>"]</p>
+					</th>
+				</tr>
+				<tr>
+					<th>
+						<label for="shortcode_name">
+							Shortcode Name
+							<input name="shortcode_name" type="text" class="regular-text ltr" value="<?php echo $current['shortcode_name']; ?>">
+						</label>
+					</th>
+					<th>
+						<?php submit_button(); ?>
+					</th>
+				</tr>
+				<tr>
+					<th>
+						Accordion Items
+					</th>
+					<th>
+						Headers
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						<select name="post_ids[]" class="searchable" multiple="multiple">
+							<?php while( $accordion_items->have_posts() ): $accordion_items->the_post(); ?>
+								<option value="<?php echo get_the_ID(); ?>" <?php echo ( !empty( $current['post_ids'] ) && in_array( get_the_ID(), $current['post_ids'] ) ) ? 'selected' : ''; ?>><?php echo get_the_title(); ?></option>
+							<?php endwhile; ?>
+						</select>
+					</td>
+					<td>
+						<select name="category_ids[]" class="searchable" multiple="multiple">
+							<?php foreach( $row_headers as $row_header ): ?>
+								<option value="<?php echo $row_header->term_id; ?>" <?php echo ( !empty( $current['category_ids'] ) && in_array( $row_header->term_id, $current['category_ids'] ) ) ? 'selected' : ''; ?>><?php echo $row_header->name; ?></option>
+							<?php endforeach; ?>
+						</select>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+	<table class="wp-list-table widefat fixed striped posts">
+		<tbody id="the-list">
+			<?php foreach( $accordion_tables as $accordion_table_name => $fields ): ?>
+				<tr>
+					<td class="title column-title has-row-actions column-primary">
+						<?php echo $accordion_table_name; ?>
+					</td>
+					<td style="width:35px">
+						<?php if( $accordion_table_name != $current['shortcode_name'] ): ?>
+						<form method="post">
+							<input type="hidden" name="shortcode_name" value="<?php echo $accordion_table_name; ?>"/>
+							<?php wp_nonce_field( 'admin_accordion_tables_edit', 'admin_accordion_tables_edit' ); ?>
+							<button type="submit">
+								<span class="dashicons-before dashicons-edit"></span>
+							</button>
+						</form>
+						<?php endif; ?>
+					</td>
+					<td style="width:35px">
+						<form method="post">
+							<input type="hidden" name="shortcode_name" value="<?php echo $accordion_table_name; ?>"/>
+							<?php wp_nonce_field( 'admin_accordion_tables_delete', 'admin_accordion_tables_delete' ); ?>
+							<button type="submit">
+								<span class="dashicons-before dashicons-trash"></span>
+							</button>
+						</form>
+					</td>
+				</tr>
+			<?php endforeach; ?>
 		</tbody>
 	</table>
 </div>
