@@ -371,29 +371,38 @@ class AccordionTables {
 	}
 
 	private function floorp($val, $precision) {
-		    $mult = pow(10, $precision);
-			return floor($val * $mult) / $mult;
+		$mult = pow(10, $precision);
+		return floor($val * $mult) / $mult;
 	}
 
-	public function accordion_tables_shortcode() {
+	public function accordion_tables_shortcode( $atts ) {
 		wp_enqueue_script('accordion_tables');
 		wp_enqueue_style('accordion_tables');
 		wp_enqueue_style('fontawesome');
-		$accordion_items = new WP_Query([
+		$post_params = [
 			'post_type' => 'accordion_tables',
 			'order' => 'ASC',
 			'orderby' => 'meta_value_num',
 			'posts_per_page' => -1,
 			'meta_key' => '_list_order'
-		]);
-		$row_headers = get_terms([
+		];
+		$tag_params = [
 			'taxonomy' => 'row_headers',
 			'hide_empty' => false,
 			'orderby' => 'meta_value_num',
 			'order' => 'ASC',
 			'meta_key' => 'tax-order'
-		]);
-		$row_width = $this->floorp( 100 / ( count( $row_headers ) + 1 ), 2 );
+		];
+		if( !empty( $atts['id'] ) ) {
+			$accordion_tables = get_option( 'accordion_tables' );
+			if( !empty( $accordion_tables[ $atts['id'] ] ) ) {
+				$post_params['post__in'] = $accordion_tables[ $atts['id'] ]['post_ids'];
+				$tag_params['include'] = $accordion_tables[ $atts['id'] ]['category_ids'];
+			}
+		}
+		$accordion_items = new WP_Query( $post_params );
+		$row_headers = get_terms( $tag_params );
+		$row_width = $this->floorp( 100 / ( count( $row_headers ) ), 2 );
 		if( !$accordion_items->have_posts() ) return;
 		ob_start();
 ?>
@@ -418,7 +427,12 @@ class AccordionTables {
 <?php $property = get_post_meta( get_the_ID(), '_accordion_labels', true ); ?>
 		<h3>
 				<div class="one-fifth align-right">
-					<span class="accordion_title"><?php the_title(); ?></span><i class="fas fa-plus-circle"></i>
+					<div class="icon-container">
+						<i class="fas fa-plus-circle"></i>
+					</div>
+					<div class="title-container">
+						<span class="accordion_title"><?php the_title(); ?></span>
+					</div>
 				</div>
 				<div class="four-fifth flex">
 				<?php foreach( $row_headers as $row_header ): ?>

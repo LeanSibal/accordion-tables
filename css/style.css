@@ -28,6 +28,21 @@
 	flex-grow:1;
 	text-align:center;
 }
+#accordion_tables .icon-container {
+	width: 15%;
+	float: right;
+}
+#accordion_tables .title-container {
+	width: 85%;
+	float: right;
+	display:table;
+	margin-top:-14px;
+	height:45px;
+}
+#accordion_tables .title-container span {
+	display:table-cell;
+	vertical-align:middle;
+}
 
 
 #accordion_tables h3 {
