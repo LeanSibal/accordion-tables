@@ -4,12 +4,12 @@ Plugin Name: Accordion Tables
 PluginURI: http://www.renesejling.dk
 Description: Display tables as Accordions using shortcode [accordion_tables]
 Author: René Sejling
-Version: 1.0.1
+Version: 1.0.2
 */
 
 class AccordionTables {
 
-	public $version = '1.0.0';
+	public $version = '1.0.2';
 
 	public function __construct() {
 		add_action('wp_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
