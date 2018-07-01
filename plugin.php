@@ -407,7 +407,7 @@ class AccordionTables {
 		ob_start();
 ?>
 <div id="accordion_tables">
-	<div class="header">
+	<div class="header mobile-hidden">
 		<div class="one-fifth nostyle">
 			<p>&nbsp;</p>
 		</div>
@@ -422,7 +422,7 @@ class AccordionTables {
 		<?php endforeach; ?>
 		</div>
 	</div>
-	<div class="accordion_container">
+	<div class="accordion_container mobile-hidden">
 <?php while( $accordion_items->have_posts() ): $accordion_items->the_post(); ?>
 <?php $property = get_post_meta( get_the_ID(), '_accordion_labels', true ); ?>
 		<h3>
@@ -457,6 +457,49 @@ class AccordionTables {
 			</div>
 		</div>
 <?php endwhile; ?>
+	</div>
+	<div class="mobile-only">
+		<div class="row-headers accordion_container">
+			<?php foreach( $row_headers as $row_header ): ?>
+			<h3>
+				<div class="header-container">
+					<h4><?php echo $row_header->name; ?></h4>
+					<span><?php echo $row_header->description; ?></span>
+					<div class="show-features">
+						<div class="button-container">
+							<i class="fas fa-angle-down"></i>
+						</div>
+					</div>
+				</div>
+			</h3>
+			<div class="responsive-table-container accordion_container">
+				<?php while( $accordion_items->have_posts() ): $accordion_items->the_post(); ?>
+				<?php $property = get_post_meta( get_the_ID(), '_accordion_labels', true ); ?>
+					<?php if( !empty( $property[ $row_header->slug ] ) ) : ?>
+					<h3>
+						<div class="title-container">
+							<div class="icon-container">
+									<?php if( $property[ $row_header->slug ] == 'check' ) : ?>
+										<img class="accordion-icon" src="<?php echo plugins_url('/accordion-tables/images/check-green.svg'); ?>"/>
+									<?php elseif( $property[ $row_header->slug ] == 'phone' ) : ?>
+										<img class="accordion-icon" src="<?php echo plugins_url('/accordion-tables/images/phone-green.svg'); ?>"/>
+									<?php else: ?>
+										<b><?php echo $property[ $row_header->slug ]; ?></b>
+									<?php endif; ?>
+							</div>
+							<div class="text-container">
+								<span><?php the_title(); ?></span>
+							</div>
+						</div>
+					</h3>
+					<div class="content-container">
+						<?php the_content(); ?>
+					</div>
+					<?php endif; ?>
+				<?php endwhile; ?>
+			</div>
+			<?php endforeach; ?>
+		</div>
 	</div>
 </div>
 <?php
