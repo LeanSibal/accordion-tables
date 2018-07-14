@@ -100,6 +100,21 @@
 	#accordion_tables .accordion-content {
 		padding:15px;
 	}
+	#accordion_tables .footer .spacer {
+		padding:25px 5px;
+	}
+	#accordion_tables .footer a.column-link {
+		background-color:#008709;
+		border-radius:10px;
+		padding:10px 30px;
+		margin-top:5px;
+		color:#ffffff;
+		font-size:18px;
+		font-weight:bold;
+	}
+	#accordion_tables .footer a.column-link:hover {
+		cursor:pointer;
+	}
 }
 @media only screen and ( max-width: 767px ) {
 	#accordion_tables .mobile-hidden {
@@ -128,6 +143,22 @@
 	}
 	#accordion_tables .header-container .show-features {
 		margin-top:25px;
+	}
+	#accordion_tables .column-link-container {
+		margin:25px 0px;
+		text-align:center;
+	}
+	#accordion_tables .responsive-table-container a.column-link {
+		background-color:#008709;
+		border-radius:10px;
+		padding:10px 30px;
+		margin-top:25px;
+		color:#ffffff;
+		font-size:18px;
+		font-weight:bold;
+	}
+	#accordion_tables .responsive-table-container a.column-link:hover {
+		cursor:pointer;
 	}
 	#accordion_tables h3:hover {
 		cursor:pointer;

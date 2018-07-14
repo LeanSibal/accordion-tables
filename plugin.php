@@ -165,6 +165,12 @@ class AccordionTables {
 		if( !empty( $term->term_id ) ) {
 			$tax_order = get_term_meta( $term->term_id, 'tax-order', true );
 		}
+		if( !empty( $term->term_id ) ) {
+			$button_text = get_term_meta( $term->term_id, 'button-text', true );
+		}
+		if( !empty( $term->term_id ) ) {
+			$button_url = get_term_meta( $term->term_id, 'button-url', true );
+		}
 		?>
  
 	<tr class="form-field">
@@ -176,12 +182,38 @@ class AccordionTables {
 			<p class="description">Determines the order in which the row header is displayed.</p>
 		</td>
 	</tr>
+
+	<tr class="form-field">
+		<th scope="row" valign="top">
+			<label for="tax-order">Button Text</label>
+		</th>
+		<td>
+			<input name="button-text" id="button-text" type="text" value="<?php echo empty( $button_text ) ? '' : $button_text; ?>" size="40" aria-required="false" />
+			<p class="description">Determines the text of the button placed at the bottom of the table.</p>
+		</td>
+	</tr>
+
+	<tr class="form-field">
+		<th scope="row" valign="top">
+			<label for="tax-order">Button Link URL</label>
+		</th>
+		<td>
+			<input name="button-url" id="button-url" type="text" value="<?php echo empty( $button_url ) ? '' : $button_url; ?>" size="40" aria-required="false" />
+			<p class="description">Determines the link of the button placed at the bottom of the table.</p>
+		</td>
+	</tr>
 		<?php
 	}
 
 	public function save_row_headers( $term_id ) {
 		if( isset( $_POST['tax-order'] ) ) {
 			update_term_meta( $term_id, 'tax-order', $_POST['tax-order'] );
+		}
+		if( isset( $_POST['button-text'] ) ) {
+			update_term_meta( $term_id, 'button-text', $_POST['button-text'] );
+		}
+		if( isset( $_POST['button-url'] ) ) {
+			update_term_meta( $term_id, 'button-url', $_POST['button-url'] );
 		}
 	}
 
@@ -458,6 +490,25 @@ class AccordionTables {
 		</div>
 <?php endwhile; ?>
 	</div>
+	<div class="footer mobile-hidden">
+		<div class="one-fifth nostyle">
+			<p>&nbsp;</p>
+		</div>
+		<div class="four-fifth flex">
+		<?php foreach( $row_headers as $row_header ): ?>
+			<div class="flex-grow" style="width:<?php echo $row_width; ?>%">
+				<div class="spacer">
+					<?php $button_text = get_term_meta( $row_header->term_id, 'button-text', true ); ?>
+					<?php $button_url = get_term_meta( $row_header->term_id, 'button-url', true ); ?>
+					<?php if( !empty( $button_text ) && !empty( $button_url ) ): ?>
+					<a class="column-link" href="<?php echo $button_url; ?>"><?php echo $button_text; ?></a>
+					<?php endif; ?>
+					<p>&nbsp;</p>
+				</div>
+			</div>
+		<?php endforeach; ?>
+		</div>
+	</div>
 	<div class="mobile-only">
 		<div class="row-headers accordion_container">
 			<?php foreach( $row_headers as $row_header ): ?>
@@ -497,6 +548,13 @@ class AccordionTables {
 					</div>
 					<?php endif; ?>
 				<?php endwhile; ?>
+					<?php $button_text = get_term_meta( $row_header->term_id, 'button-text', true ); ?>
+					<?php $button_url = get_term_meta( $row_header->term_id, 'button-url', true ); ?>
+					<?php if( !empty( $button_text ) && !empty( $button_url ) ): ?>
+					<div class="column-link-container">
+					<a class="column-link" href="<?php echo $button_url; ?>"><?php echo $button_text; ?></a>
+					</div>
+					<?php endif; ?>
 			</div>
 			<?php endforeach; ?>
 		</div>
