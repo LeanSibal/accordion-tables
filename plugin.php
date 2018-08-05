@@ -165,12 +165,10 @@ class AccordionTables {
 		$tax_order = "0";
 		if( !empty( $term->term_id ) ) {
 			$tax_order = get_term_meta( $term->term_id, 'tax-order', true );
-		}
-		if( !empty( $term->term_id ) ) {
 			$button_text = get_term_meta( $term->term_id, 'button-text', true );
-		}
-		if( !empty( $term->term_id ) ) {
 			$button_url = get_term_meta( $term->term_id, 'button-url', true );
+			$button_id = get_term_meta( $term->term_id, 'button-id', true );
+			$button_open_new_tab = get_term_meta( $term->term_id, 'button-open-new-tab', true );
 		}
 		?>
  
@@ -203,6 +201,26 @@ class AccordionTables {
 			<p class="description">Determines the link of the button placed at the bottom of the table.</p>
 		</td>
 	</tr>
+
+	<tr class="form-field">
+		<th scope="row" valign="top">
+			<label for="tax-order">Button ID</label>
+		</th>
+		<td>
+			<input name="button-id" id="button-id" type="text" value="<?php echo empty( $button_id ) ? '' : $button_id; ?>" size="40" aria-required="false" />
+			<p class="description">Determines the custom ID of the button.</p>
+		</td>
+	</tr>
+
+	<tr class="form-field">
+		<th scope="row" valign="top">
+			<label for="tax-order">Open link in new window?</label>
+		</th>
+		<td>
+			<input name="button-open-new-tab" id="button-open-new-tab" type="checkbox" <?php echo ( !empty( $button_open_new_tab ) && $button_open_new_tab == 'on' ) ? 'checked="checked"' : ''; ?>/>
+			<p class="description">Determines if the link should be openend on a new tab / window.</p>
+		</td>
+	</tr>
 		<?php
 	}
 
@@ -215,6 +233,14 @@ class AccordionTables {
 		}
 		if( isset( $_POST['button-url'] ) ) {
 			update_term_meta( $term_id, 'button-url', $_POST['button-url'] );
+		}
+		if( isset( $_POST['button-id'] ) ) {
+			update_term_meta( $term_id, 'button-id', $_POST['button-id'] );
+		}
+		if( isset( $_POST['button-open-new-tab'] ) ) {
+			update_term_meta( $term_id, 'button-open-new-tab', $_POST['button-open-new-tab'] );
+		} else {
+			delete_term_meta( $term_id, 'button-open-new-tab' );
 		}
 	}
 
@@ -258,14 +284,14 @@ class AccordionTables {
 		register_post_type( 'accordion_tables', $args );
 	}
 
-	public function shortcode_submenu() {
+	public function accordion_submenu() {
 		add_submenu_page(
 			'edit.php?post_type=accordion_tables',
 			__('Table Shortcodes','accordion_tables'),
 			__('Table Shortcodes','accordion_tables'),
 			'manage_options',
 			'table_shortcodes_page',
-			[ $this, 'table_shortcodes_page' ]
+			[ &$this, 'table_shortcodes_page' ]
 		);
 	}
 
@@ -504,8 +530,10 @@ class AccordionTables {
 				<div class="spacer">
 					<?php $button_text = get_term_meta( $row_header->term_id, 'button-text', true ); ?>
 					<?php $button_url = get_term_meta( $row_header->term_id, 'button-url', true ); ?>
+					<?php $button_id= get_term_meta( $row_header->term_id, 'button-id', true ); ?>
+					<?php $button_open_new_tab = get_term_meta( $row_header->term_id, 'button-open-new-tab', true ); ?>
 					<?php if( !empty( $button_text ) && !empty( $button_url ) ): ?>
-					<a class="column-link" href="<?php echo $button_url; ?>"><?php echo $button_text; ?></a>
+					<a class="column-link" href="<?php echo $button_url; ?>" <?php echo !empty( $button_id ) ? ( "id='" . $button_id . "'" ) : ''; ?> <?php echo !empty( $button_open_new_tab ) ? 'target="_blank"' : ''; ?>><?php echo $button_text; ?></a>
 					<?php endif; ?>
 					<p>&nbsp;</p>
 				</div>
@@ -554,9 +582,11 @@ class AccordionTables {
 				<?php endwhile; ?>
 					<?php $button_text = get_term_meta( $row_header->term_id, 'button-text', true ); ?>
 					<?php $button_url = get_term_meta( $row_header->term_id, 'button-url', true ); ?>
+					<?php $button_id= get_term_meta( $row_header->term_id, 'button-id', true ); ?>
+					<?php $button_open_new_tab = get_term_meta( $row_header->term_id, 'button-open-new-tab', true ); ?>
 					<?php if( !empty( $button_text ) && !empty( $button_url ) ): ?>
 					<div class="column-link-container">
-					<a class="column-link" href="<?php echo $button_url; ?>"><?php echo $button_text; ?></a>
+					<a class="column-link" href="<?php echo $button_url; ?>" <?php echo !empty( $button_id ) ? ( "id='" . $button_id . "'" ) : ''; ?> <?php echo !empty( $button_open_new_tab ) ? 'target="_blank"' : ''; ?>><?php echo $button_text; ?></a>
 					</div>
 					<?php endif; ?>
 			</div>
