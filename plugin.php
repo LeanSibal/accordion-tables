@@ -23,6 +23,7 @@ class AccordionTables {
 		add_action( 'add_meta_boxes', [ $this, 'accordion_labels_meta_box' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'admin_enqueue_scripts' ] );
 		add_action( 'save_post', [ $this, 'save_accordion_labels_meta_box_data' ] );
+		add_action( 'admin_menu', [ $this, 'accordion_submenu' ] );
 	}
 
 	public function accordion_labels_meta_box() {
@@ -255,6 +256,9 @@ class AccordionTables {
 		);
 
 		register_post_type( 'accordion_tables', $args );
+	}
+
+	public function shortcode_submenu() {
 		add_submenu_page(
 			'edit.php?post_type=accordion_tables',
 			__('Table Shortcodes','accordion_tables'),
